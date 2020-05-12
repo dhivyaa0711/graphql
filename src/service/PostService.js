@@ -84,7 +84,8 @@ class PostService {
             const params = {
                 Bucket: BUCKET_NAME,
                 Key: `uploads/${filename}`,
-                Body: readStream
+                Body: readStream,
+                ACL:'public-read'
             };
 
             // Uploading files to the bucket
