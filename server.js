@@ -1,7 +1,6 @@
 const express = require('express');
 const expressPlayground = require('graphql-playground-middleware-express').default;
 const { ApolloServer } = require('apollo-server-express');
-const fileUpload = require('express-fileupload');
 const { typeDefs, resolvers } = require('./graphql/Post.js');
 const postService = require('./src/service/PostService');
 const PORT = process.env.PORT || 4000;
