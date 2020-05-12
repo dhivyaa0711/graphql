@@ -15,7 +15,7 @@ class PostService {
         this.postRepository = new PostRepository(dynamodbClient);
         this.getPost = this.getPost.bind(this);
         this.getAllPosts = this.getAllPosts.bind(this);
-        this.uploadPost = this.uploadPost.bind(this);
+        this.createPost = this.createPost.bind(this);
         this.removePost = this.removePost.bind(this);
         this.likeUnlikePost = this.likeUnlikePost.bind(this);
         this.upsertComment = this.upsertComment.bind(this);
@@ -77,7 +77,7 @@ class PostService {
             }
         }
     }
-    async uploadPost(post) {
+    async createPost(post) {
         const { filename, createReadStream } = await post.file;
         const { caption, createdBy } = post;
         try {

@@ -28,7 +28,7 @@ const typeDefs = gql(`
         commentStatement: String
         commentBy: Employee
     }
-    input uploadPostInput {
+    input createPostInput {
         file: Upload
         caption: String
         createdBy: EmployeeInput
@@ -64,7 +64,7 @@ const typeDefs = gql(`
         getAllPosts: PostResponse
     }
     type Mutation {
-        uploadPost(post: uploadPostInput): PostResponse
+        createPost(post: createPostInput): PostResponse
         removePost(photoId:ID!, filename: String): Response
         likeUnlikePost(post: PostInput): PostResponse
         upsertComment(post: PostInput): PostResponse
@@ -89,9 +89,9 @@ const resolvers = {
         },
     },
     Mutation: {
-        uploadPost: async (_, args, {dataSources}) => {
+        createPost: async (_, args, {dataSources}) => {
             const { post } = args;            
-            const response = await dataSources.postService.uploadPost(post);
+            const response = await dataSources.postService.createPost(post);
             return response;
         },
         removePost: async (_, args, {dataSources}) => {
