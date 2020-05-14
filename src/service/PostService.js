@@ -23,6 +23,7 @@ class PostService {
     }
     async getPost(id) {
         try {
+            ;
             logger.debug('Request received to fetch post details for id: ' + id);
             const postDetails = [];
             const post = await this.postRepository.get(id);
@@ -31,6 +32,7 @@ class PostService {
                 postDetails.push(post);
             }
             else {
+                ;
                 return {
                     code: 404,
                     success: false,
@@ -38,6 +40,7 @@ class PostService {
                     post: postDetails
                 }
             }
+            
             return {
                 code: 200,
                 success: true,
@@ -50,16 +53,18 @@ class PostService {
             return {
                 code: 500,
                 success: false,
-                message: "Error while fetching post" + error.message ? `: ${error.message}` : "",
+                message: `Error while fetching post:  ${error.message ? error.message : ""}`,
                 post: null
             }
         }
     }
     async getAllPosts() {
         try {
+            
             logger.debug('Request received to fetch all posts');
             const post = await this.postRepository.scan();
             logger.debug('Retrieved all posts from db');
+            //;
             return {
                 code: 200,
                 success: true,
@@ -72,7 +77,7 @@ class PostService {
             return {
                 code: 500,
                 success: false,
-                message: "Error while fetching post" + error.message ? `: ${error.message}` : "",
+                message: `Error while fetching posts:  ${error.message ? error.message : ""}`,
                 post: null
             }
         }
@@ -81,6 +86,7 @@ class PostService {
         const { filename, createReadStream } = await post.file;
         const { caption, createdBy } = post;
         try {
+            
             logger.debug('Request received to upload post');
             const readStream = createReadStream();
             let post;
@@ -112,6 +118,7 @@ class PostService {
                 postResponse.push(post);
                 logger.debug('Inserted post details to db with post id:: ' + post.id);
             }
+            ;
             return {
                 code: 201,
                 success: true,
@@ -124,7 +131,7 @@ class PostService {
             return {
                 code: 500,
                 success: false,
-                message: 'Post upload failed' + error.message ? `: ${error.message}` : "",
+                message: `Post upload failed:  ${error.message ? error.message : ""}`,
                 post: null
             }
         }
@@ -140,6 +147,7 @@ class PostService {
                 Key: filename
             }).promise();
             logger.debug('Photo deleted from S3 bucket::', filename);
+            ;
             if (deleteResponse) {
                 return {
                     code: 200,
@@ -153,13 +161,14 @@ class PostService {
             return {
                 code: 500,
                 success: false,
-                message: 'Post deletion failed' + error.message ? `: ${error.message}` : "",
+                message: `Post deletion failed:  ${error.message ? error.message : ""}`,
             };
         }
     }
     async likeUnlikePost(post) {
         let filteredResponse, putResponse;
         try {
+            ;
             logger.debug('Request received to like/unlike post');
             let postResponse = [];
             let getResponse = await this.postRepository.get({ id: post.id });
@@ -197,13 +206,14 @@ class PostService {
             return {
                 code: 500,
                 success: false,
-                message: 'Could not save your like. Please try again',
+                message: `Could not save your like. Please try again:  ${error.message ? error.message : ""}`,
                 post: null
             };
         }
     }
     async upsertComment(post) {
         try {
+            ;
             logger.debug('Request received to upsert comments for post id:: ' + post.id);
             let postResponse = [];
             let getResponse = await this.postRepository.get({ id: post.id });
@@ -246,13 +256,14 @@ class PostService {
             return {
                 code: 500,
                 success: false,
-                message: 'Error while saving comment. Please try again',
+                message: `Error while saving comment. Please try again:  ${error.message ? error.message : ""}`,
                 post: null
             };
         }
     }
     async removeComment(post) {
         try {
+            ;
             logger.debug('Request received to remove comments for post id:: ' + post.id);
             let filteredResponse;
             let postResponse = [];
@@ -279,7 +290,7 @@ class PostService {
             return {
                 code: 500,
                 success: false,
-                message: 'Error while removing comment. Please try again',
+                message: `Error while removing comment. Please try again:  ${error.message ? error.message : ""}`,
                 post: null
             };
         }
