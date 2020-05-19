@@ -28,9 +28,9 @@ To run the app, follow the below steps:
 
 3. Now you have to create an s3 bucket in aws console<br/>
     i.   Login or signup to aws console<br/>
-    ii.  search for  `s3` in services
-    iii. create an s3 bucket with the unique name and a specific region
-    iv.  Goto `My Security Credentials` which is in dropdown of your username
+    ii.  search for  `s3` in services<br/>
+    iii. create an s3 bucket with the unique name and a specific region<br/>
+    iv.  Goto `My Security Credentials` which is in dropdown of your username<br/>
     v.   click on `access keys` and generate a new key and download the rootkey file
 4. Add the credentials to the credentials file. Goto path
     ```shell
