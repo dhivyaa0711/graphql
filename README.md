@@ -25,7 +25,28 @@ To run the app, follow the below steps:
         ```shell
         http://localhost:8000/shell
         ```
-3. To run the graphql server run the below commands in the project folder
+
+3. Now you have to create an s3 bucket in aws console<br/>
+    i.   Login or signup to aws console<br/>
+    ii.  search for  `s3` in services
+    iii. create an s3 bucket with the unique name and a specific region
+    iv.  Goto `My Security Credentials` which is in dropdown of your username
+    v.   click on `access keys` and generate a new key and download the rootkey file
+4. Add the credentials to the credentials file. Goto path
+    ```shell
+        C:\Users\userid\.aws\credentials
+    ```
+    and add the credentials in the following manner
+    ```shell
+        [default]
+        aws_access_key_id = fakeId
+        aws_secret_access_key = fakeKey
+        [awss3]
+        aws_access_key_id = ----key id prsent in downloaded file-----
+        aws_secret_access_key = ----access key--------
+    ```
+5. Go to `package.json` in graphql application and replace ``photoposting`` in line number 20 with `YOUR S3 BUCKET NAME`
+4. To run the graphql server run the below commands in the project folder
     ```bash
         npm install
     ```
