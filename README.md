@@ -12,7 +12,7 @@ To run the app, follow the below steps:
     ```
     If you want to run on different port mention the port number in endpoint of file
         `src -> utils -> DynamoDBCLient.js`
-    and run the command with same port number for example if the mentioned port is 9000
+    and run the command with same port number <br/>for example if the mentioned port is 9000, then use the bellow command
     ```shell
         java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb -port 9000
     ```
@@ -21,16 +21,20 @@ To run the app, follow the below steps:
     ```shell
         https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html
     ```
-    ii. Configure AWS using `aws configure` command from CMD. <br/>Give any name, key, aws region(available in the below document) and output as json<br/>
-    iii. Download dynamodb local and follow the steps given here to start dynamodb locally-<br/>
+    ii. Check if AWS CLI is installed in your system with the following commands
+    ```shell
+        aws --version    (or)    /usr/local/bin/aws --version
+    ```
+    iii. Configure AWS using `aws configure` command from CMD. <br/>Give any key, id, aws region(available in the below document) and output as json<br/>
+    iv. Download dynamodb local and follow the steps given here to start dynamodb locally-<br/>
     ```shell
         https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html
     ```
-    iv. After setting up db and running jar file, you should be able to view the dynamodb shell on
+    v. After setting up db and running jar file, you should be able to view the dynamodb shell on
     ```shell
         http://localhost:8000/shell
     ```
-    v. Paste the below code in editor and click `run`(play button)<br/>
+    vi. Paste the below code in editor and click `run`(play button)<br/>
     ```shell
                 var params = {
                 TableName: 'post',
@@ -77,7 +81,7 @@ To run the app, follow the below steps:
         aws_secret_access_key = ----access key--------
     ```
 5. Go to `package.json` in graphql application and replace ``photoposting`` in line number 20 with `YOUR S3 BUCKET NAME`
-4. To run the graphql server run the below commands in the project folder
+6. To run the graphql server run the below commands in the project folder
     ```bash
         npm install
     ```
@@ -87,3 +91,11 @@ To run the app, follow the below steps:
     ```bash
         npm start
     ```
+
+7. To run the apis, import the postmanclient collection from the below link `You need recent version of postman client to be installed in your system i.e ^7.2`
+    ```shell
+        https://www.getpostman.com/collections/2cc8f71c1d9b222d0df6
+    ```
+->In post a picture, inside body add a picture from your local computer as a `value` for `key=picture`
+->In `get a post by id`, `add comment to a post`, `like/unlike apost`, `remove a post`, `remove a comment` we need the id of the post which we have created
+->In `remove a comment` you have to mention the if of the comment additionally
