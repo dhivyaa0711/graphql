@@ -96,6 +96,6 @@ To run the app, follow the below steps:
     ```shell
         https://www.getpostman.com/collections/2cc8f71c1d9b222d0df6
     ```
-->In post a picture, inside body add a picture from your local computer as a `value` for `key=picture`
-->In `get a post by id`, `add comment to a post`, `like/unlike apost`, `remove a post`, `remove a comment` we need the id of the post which we have created
-->In `remove a comment` you have to mention the if of the comment additionally
+->In post a picture, inside body add a picture from your local computer as a `value` for `key=picture`<br/>
+->In `get a post by id`, `add comment to a post`, `like/unlike apost`, `remove a post`, `remove a comment` we need the id of the post which we have created<br/>
+->In `remove a comment` you have to mention the if of the comment additionally<br/>
