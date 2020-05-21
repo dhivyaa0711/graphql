@@ -17,7 +17,7 @@ To run the app, follow the below steps:
      java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb -port 9000
     ```
 2. If you do not have dynamodb setup locally then follow these step to setup<br/>
-    i. install AWS CLI from link: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html<br/>
+    i. Install AWS CLI from link: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html<br/>
     ii. Configure AWS using "aws configure" command from CMD. Give any name, key, aws region(available in the below document) and output as json<br/>
     iii. Download dynamodb local and follow the steps given here to start dynamodb locally-<br/>
         https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html<br/>
@@ -25,6 +25,32 @@ To run the app, follow the below steps:
         ```shell
         http://localhost:8000/shell
         ```
+    v. Paste the below code in editor and click `run`(play button)
+        ```shell
+        var params = {
+        TableName: 'post',
+        KeySchema: [ 
+            { 
+                AttributeName: 'id',
+                KeyType: 'HASH',
+            }
+        ],
+        AttributeDefinitions: [ 
+            {
+                AttributeName: 'id',
+                AttributeType: 'S', 
+            }
+        ],
+        ProvisionedThroughput: { 
+            ReadCapacityUnits: 1, 
+            WriteCapacityUnits: 1, 
+        }
+    };
+    dynamodb.createTable(params, function(err, data) {
+        if (err) ppJson(err); 
+        else ppJson(data); 
+    });
+    ```
 
 3. Now you have to create an s3 bucket in aws console<br/>
     i.   Login or signup to aws console<br/>
