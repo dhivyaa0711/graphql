@@ -29,33 +29,33 @@ To run the app, follow the below steps:
     iv. After setting up db and running jar file, you should be able to view the dynamodb shell on
         ```shell
         http://localhost:8000/shell
-        ```
+        ```<br/>
     v. Paste the below code in editor and click `run`(play button)<br/>
         ```shell
-            var params = {
-            TableName: 'post',
-            KeySchema: [ 
-                { 
-                    AttributeName: 'id',
-                    KeyType: 'HASH',
-                }
-            ],
-            AttributeDefinitions: [ 
-                {
-                    AttributeName: 'id',
-                    AttributeType: 'S', 
-                }
-            ],
-            ProvisionedThroughput: { 
-                ReadCapacityUnits: 1, 
-                WriteCapacityUnits: 1, 
-            }
-        };
-        dynamodb.createTable(params, function(err, data) {
-            if (err) ppJson(err); 
-            else ppJson(data); 
-        });
-    ```
+            var params = {<br/>
+            TableName: 'post',<br/>
+            KeySchema: [ <br/>
+                { <br/>
+                    AttributeName: 'id',<br/>
+                    KeyType: 'HASH',<br/>
+                }<br/>
+            ],<br/>
+            AttributeDefinitions: [ <br/>
+                {<br/>
+                    AttributeName: 'id',<br/>
+                    AttributeType: 'S', <br/>
+                }<br/>
+            ],<br/>
+            ProvisionedThroughput: { <br/>
+                ReadCapacityUnits: 1, <br/>
+                WriteCapacityUnits: 1, <br/>
+            }<br/>
+        };<br/>
+        dynamodb.createTable(params, function(err, data) {<br/>
+            if (err) ppJson(err); <br/>
+            else ppJson(data); <br/>
+        });<br/>
+        ```
 
 3. Now you have to create an s3 bucket in aws console<br/>
     i.   Login or signup to aws console<br/>
