@@ -10,12 +10,17 @@ To run the app, follow the below steps:
     ```shell
      java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb
     ```
-    If you want to run on different port mention the port number in endpoint of file
+    ->If you want to run on different port mention the port number in endpoint of file
         `src -> utils -> DynamoDBCLient.js`
     and run the command with same port number <br/>for example if the mentioned port is 9000, then use the bellow command
     ```shell
         java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb -port 9000
     ```
+    -> To run dynamoDB locally in `LINUX` system, check the following link
+    ```shell
+        https://garywoodfine.com/how-to-install-dynamodb-on-local-ubuntu-development/
+    ```
+
 2. If you do not have dynamodb setup locally then follow these step to setup<br/>
     i. Install AWS CLI from link: 
     ```shell
@@ -99,3 +104,107 @@ To run the app, follow the below steps:
 ->In post a picture, inside body add a picture from your local computer as a `value` for `key=picture`<br/>
 ->In `get a post by id`, `add comment to a post`, `like/unlike apost`, `remove a post`, `remove a comment` we need the id of the post which we have created<br/>
 ->In `remove a comment` you have to mention the if of the comment additionally<br/>
+
+# Using postmanclient collection
+
+1. To run the APIs, import the postmanclient collection from the below link `You need recent version of postman client to be installed in your system i.e ^7.2`
+    ```shell
+        https://www.getpostman.com/collections/2cc8f71c1d9b222d0df6
+    ```
+    i. Post a picture: <br/>
+        You should be able to see 3 key value pairs in `body->form data`... <br/>
+    ```shell
+            i. For value of operations: You can change the createor id
+            ii.For picture : Add a picture(`of size less than 1MB`) from local system
+    ```
+        Response : you will get a response as below
+    ```shell
+            {
+                "data": {
+                    "createPost": {
+                        "code": 201,
+                        "success": true,
+                        "message": "Post uploaded successfully",
+                        "post": [
+                            {
+                                "id": "700aa3d7-c8f3-487b-bb4e-1672fb762074",
+                                "url": "https://my1bucket2.s3.ap-south-1.amazonaws.com/uploads/1001/pic5.jpg"
+                            }]}}}
+    ```
+    ii. Get post by id:<br/>
+        You should be able to see a query in `body -> graphql`...Add the previous post->id which you have got as a response for posting a picture.<br/>
+        Response : you will be getting a post object with all the details<br/>
+    iii. Like or unlike a post:<br/>
+        You should be able to see a query in `body -> graphql`...Add the previous post->id which you have got as a response for posting a picture.<br/>
+        Response : you will get a response as below  and if you hit for same post id twice it is trated as unlike and gets removed from likes
+    ```shell
+            {
+                "data": {
+                    "likeUnlikePost": {
+                        "code": 200,
+                        "success": true,
+                        "message": "Post liked/unliked",
+                        "post": [
+                            {
+                                "id": "27e365cb-caa4-47d0-9c6d-67357aa25a4d",
+                                "likes": {
+                                    "count": 1,
+                                    "employee": [
+                                        {
+                                            "id": "10002"
+                                        }]}}]}}}
+    ```
+    iv. Add comment to a post:<br/>
+    You should be able to see a query in `body -> graphql`...Add the previous post->id which you have got as a response for posting a picture.<br/>
+        Response : you will get a response as below
+    ```shell
+            {
+                "data": {
+                    "upsertComment": {
+                        "code": 200,
+                        "success": true,
+                        "message": "Comment saved successfully ",
+                        "post": [
+                            {
+                                "id": "27e365cb-caa4-47d0-9c6d-67357aa25a4d",
+                                "comments": [
+                                    {
+                                        "id": "829d7f08-09bc-4590-90d8-4740bddc09be",
+                                        "commentStatement": "!",
+                                        "commentBy": {
+                                        "firstName": "shravyaa"
+                                        }}]}]}}}
+    ```
+    v.Get all posts with id:<br/>
+    You should be able to see a query in `body -> graphql`...<br/>
+        Response : you will get all the ids of posted pictures<br/>
+    vi.Remove a comment:<br/>
+    You should be able to see a query in `body -> graphql`...Add the previous post->id which you have got as a response for posting a picture and the comment->id which you have got after adding the comment.<br/>
+        Response : you will get the response like this
+    ```shell
+            {
+                "data": {
+                    "removeComment": {
+                        "code": 200,
+                        "success": true,
+                        "message": "Comment removed successfully",
+                        "post": [
+                            {
+                                "comments": []
+                            }]}}}
+    ```
+    vii. Remove a Post: <br/>
+    You should be able to see a query in `body -> graphql`...Add the creatorid(if changed in posting a picture) and in the place of 1009 in `uploads/1009/gym.jpg` mention the id of the creator of post and mention the name of the file.
+        Response: you will get the response like this
+    ```shell
+                {
+                    "data": {
+                        "removePost": {
+                            "code": 200,
+                            "success": true,
+                            "message": "Post deleted successfully"
+                        }}}
+    ```
+    viii. Get all posts with all details:<br/>
+    You should be able to see a query in `body -> graphql`...<br/>
+    Response : you will get all the details of posted pictures<br/>
