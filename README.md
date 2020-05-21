@@ -31,31 +31,31 @@ To run the app, follow the below steps:
         http://localhost:8000/shell
     ```
     v. Paste the below code in editor and click `run`(play button)<br/>
-        ```shell
-            var params = {
-            TableName: 'post',
-            KeySchema: [ 
-                { 
-                    AttributeName: 'id',
-                    KeyType: 'HASH',
+    ```shell
+                var params = {
+                TableName: 'post',
+                KeySchema: [ 
+                    { 
+                        AttributeName: 'id',
+                        KeyType: 'HASH',
+                    }
+                ],
+                AttributeDefinitions: [ 
+                    {
+                        AttributeName: 'id',
+                        AttributeType: 'S', 
+                    }
+                ],
+                ProvisionedThroughput: { 
+                    ReadCapacityUnits: 1, 
+                    WriteCapacityUnits: 1, 
                 }
-            ],
-            AttributeDefinitions: [ 
-                {
-                    AttributeName: 'id',
-                    AttributeType: 'S', 
-                }
-            ],
-            ProvisionedThroughput: { 
-                ReadCapacityUnits: 1, 
-                WriteCapacityUnits: 1, 
-            }
-            };
-            dynamodb.createTable(params, function(err, data) {
-                if (err) ppJson(err); 
-                else ppJson(data); 
-            });
-        ```
+                };
+                dynamodb.createTable(params, function(err, data) {
+                    if (err) ppJson(err); 
+                    else ppJson(data); 
+                });
+    ```
 
 3. Now you have to create an s3 bucket in aws console<br/>
     i.   Login or signup to aws console<br/>
