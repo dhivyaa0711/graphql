@@ -100,15 +100,20 @@ To run the app, follow the below steps:
 
 # Using postmanclient collection
 
-1. To run the APIs, import the postmanclient collection from the below link `You need recent version of postman client to be installed in your system i.e ^7.2`
+1. To run the APIs, import the postmanclient collection from the below link `You need recent version of postman client to be installed in your system i.e ^7.2`<br/>
+
+    Note: To import the collection in postman client Goto <br/>
+        Import(on top left of postmanclient) -> link <br/>
+        paste the below url and click `continue`. you should be able to see the collection named `fitness app` in collections tab on the left.
+
     ```shell
-        https://www.getpostman.com/collections/2cc8f71c1d9b222d0df6
+        https://www.getpostman.com/collections/2cc8f71c1d9b222d0df6 
     ```
     i. Post a picture: <br/>
         You should be able to see 3 key value pairs in `body->form data`... <br/>
     ```shell
-            i. For value of operations: You can change the createor id
-            ii.For picture : Add a picture(`of size less than 1MB`) from local system
+            i. For value of operations: You can change the creator id
+            ii.For picture : Add a picture(`of size less than 3MB`) from local system
     ```
         Response : you will get a response as below
     ```shell
