@@ -22,11 +22,11 @@ To run the app, follow the below steps:
     iii. Download dynamodb local and follow the steps given here to start dynamodb locally-<br/>
         https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html<br/>
     iv. After setting up db and running jar file, you should be able to view the dynamodb shell on
-        ```shell
+        ```
         http://localhost:8000/shell
         ```<br/>
     v. Paste the below code in editor and click `run`(play button)<br/>
-        ```shell
+        ```
         var params = {
         TableName: 'post',
         KeySchema: [ 
