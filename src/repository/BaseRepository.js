@@ -28,7 +28,7 @@ class BaseRepository {
             throw new Error(error);
         }
         return true;
-    }    
+    }
     async query(params) {
         const request = {
             TableName: this.table,
@@ -63,10 +63,14 @@ class BaseRepository {
             throw new Error(error);
         }
     }
-    async scan() {
+    async scan(pageSize, lastItem) {
         const request = {
             TableName: this.table,
+            Limit: pageSize,
         };
+        if (lastItem) {
+            request.ExclusiveStartKey = { id: lastItem };
+        }
         try {
             const response = this.client.scan(request).promise();
             return response;

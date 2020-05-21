@@ -40,7 +40,7 @@ class PostService {
                     post: postDetails
                 }
             }
-            
+
             return {
                 code: 200,
                 success: true,
@@ -58,17 +58,17 @@ class PostService {
             }
         }
     }
-    async getAllPosts() {
+    async getAllPosts(pageSize, lastItem) {
         try {
-            
+            let post;
             logger.debug('Request received to fetch all posts');
-            const post = await this.postRepository.scan();
+            post = await this.postRepository.scan(pageSize, lastItem);
             logger.debug('Retrieved all posts from db');
-            //;
             return {
                 code: 200,
                 success: true,
                 message: "Post fetched successfully",
+                lastEvaluatedKey: post.LastEvaluatedKey ? post.LastEvaluatedKey.id : post.LastEvaluatedKey,
                 post: post.Items
             }
         }
@@ -86,7 +86,7 @@ class PostService {
         const { filename, createReadStream } = await post.file;
         const { caption, createdBy } = post;
         try {
-            
+
             logger.debug('Request received to upload post');
             const readStream = createReadStream();
             let post;
@@ -94,7 +94,7 @@ class PostService {
             // Setting up S3 upload parameters
             const params = {
                 Bucket: BUCKET_NAME,
-                Key: `uploads/${filename}`,
+                Key: `uploads/${createdBy.id}/${filename}`,
                 Body: readStream,
                 ACL: 'public-read'
             };
