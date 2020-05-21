@@ -11,6 +11,7 @@ const typeDefs = gql(`
         code: Int!
         success: Boolean
         message: String
+        lastEvaluatedKey: String
         post: [Post]
     }
     type Post {
@@ -61,7 +62,7 @@ const typeDefs = gql(`
     }
     type Query {
         getPost(id: ID!): PostResponse
-        getAllPosts: PostResponse
+        getAllPosts(pageSize: Int, lastItem: String): PostResponse
     }
     type Mutation {
         createPost(post: createPostInput): PostResponse
@@ -83,8 +84,8 @@ const resolvers = {
             const response = await dataSources.postService.getPost(args);
             return response;
         },
-        getAllPosts: async (_, __, {dataSources}) => {
-            const response = await dataSources.postService.getAllPosts();
+        getAllPosts: async (_, args, {dataSources}) => {
+            const response = await dataSources.postService.getAllPosts(args.pageSize, args.lastItem);
             return response;
         },
     },
