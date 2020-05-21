@@ -24,8 +24,8 @@ To run the app, follow the below steps:
     iv. After setting up db and running jar file, you should be able to view the dynamodb shell on
         ```shell
         http://localhost:8000/shell
-        ```
-    v. Paste the below code in editor and click `run`(play button)
+        ```<br/>
+    v. Paste the below code in editor and click `run`(play button)<br/>
         ```shell
         var params = {
         TableName: 'post',
