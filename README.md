@@ -26,7 +26,7 @@ To run the app, follow the below steps:
         http://localhost:8000/shell
         ```<br/>
     v. Paste the below code in editor and click `run`(play button)<br/>
-        ```
+        ```sh
         var params = {
         TableName: 'post',
         KeySchema: [ 
@@ -50,7 +50,7 @@ To run the app, follow the below steps:
         if (err) ppJson(err); 
         else ppJson(data); 
     });
-    ```
+        ```
 
 3. Now you have to create an s3 bucket in aws console<br/>
     i.   Login or signup to aws console<br/>
