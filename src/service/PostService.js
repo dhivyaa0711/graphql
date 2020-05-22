@@ -1,5 +1,6 @@
-const dynamodbClient = require('../utils/DynamoDBClient');
+const mongoose = require('mongoose');
 const PostRepository = require('../repository/PostRepository');
+let postSchema = require('../mongoSchema/Post');
 const logger = require('../utils/LogUtils');
 const { v4 } = require('uuid');
 const AWS = require('aws-sdk');
@@ -12,14 +13,16 @@ const s3 = new AWS.S3();
 
 class PostService {
     constructor() {
-        this.postRepository = new PostRepository(dynamodbClient);
+        console.log("postSchema..",postSchema)
+        this.postModel = mongoose.model('Post', postSchema);
+        this.postRepository = new PostRepository(this.postModel);
         this.getPost = this.getPost.bind(this);
-        this.getAllPosts = this.getAllPosts.bind(this);
-        this.createPost = this.createPost.bind(this);
-        this.removePost = this.removePost.bind(this);
-        this.likeUnlikePost = this.likeUnlikePost.bind(this);
-        this.upsertComment = this.upsertComment.bind(this);
-        this.removeComment = this.removeComment.bind(this);
+        // this.getAllPosts = this.getAllPosts.bind(this);
+        // this.createPost = this.createPost.bind(this);
+        // this.removePost = this.removePost.bind(this);
+        // this.likeUnlikePost = this.likeUnlikePost.bind(this);
+        // this.upsertComment = this.upsertComment.bind(this);
+        // this.removeComment = this.removeComment.bind(this);
     }
     async getPost(id) {
         try {
@@ -32,7 +35,6 @@ class PostService {
                 postDetails.push(post);
             }
             else {
-                ;
                 return {
                     code: 404,
                     success: false,
@@ -58,7 +60,7 @@ class PostService {
             }
         }
     }
-    async getAllPosts(pageSize, lastItem) {
+    /*async getAllPosts(pageSize, lastItem) {
         try {
             let post;
             logger.debug('Request received to fetch all posts');
@@ -294,7 +296,7 @@ class PostService {
                 post: null
             };
         }
-    }
+    }*/
 }
 
 module.exports = PostService;

@@ -84,12 +84,12 @@ const resolvers = {
             const response = await dataSources.postService.getPost(args);
             return response;
         },
-        getAllPosts: async (_, args, {dataSources}) => {
-            const response = await dataSources.postService.getAllPosts(args.pageSize, args.lastItem);
-            return response;
-        },
+        // getAllPosts: async (_, args, {dataSources}) => {
+        //     const response = await dataSources.postService.getAllPosts(args.pageSize, args.lastItem);
+        //     return response;
+        // },
     },
-    Mutation: {
+    /*Mutation: {
         createPost: async (_, args, {dataSources}) => {
             const { post } = args;            
             const response = await dataSources.postService.createPost(post);
@@ -115,7 +115,7 @@ const resolvers = {
             const response = await dataSources.postService.removeComment(post);
             return response;
         }
-    }
+    }*/
 };
 
 exports.typeDefs = typeDefs;

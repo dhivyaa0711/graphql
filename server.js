@@ -1,7 +1,7 @@
 const express = require('express');
 const expressPlayground = require('graphql-playground-middleware-express').default;
 const { ApolloServer } = require('apollo-server-express');
-const { typeDefs, resolvers } = require('./graphql/Post.js');
+const { typeDefs, resolvers } = require('./src/graphql/Post');
 const postService = require('./src/service/PostService');
 const PORT = process.env.PORT || 4000;
 // Create an express server and a GraphQL endpoint
