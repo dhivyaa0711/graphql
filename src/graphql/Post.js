@@ -15,7 +15,7 @@ const typeDefs = gql(`
         post: [Post]
     }
     type Post {
-        id: ID!
+        id: ID
         url: String
         key: String
         likes: Likes
@@ -61,7 +61,7 @@ const typeDefs = gql(`
         lastName: String
     }
     type Query {
-        getPost(id: ID!): PostResponse
+        getPost(_id: ID!): PostResponse
         getAllPosts(pageSize: Int, lastItem: String): PostResponse
     }
     type Mutation {
@@ -80,7 +80,7 @@ const typeDefs = gql(`
 // resolver
 const resolvers = {
     Query: {
-        getPost: async (_, args, {dataSources}) => {
+        getPost: async (_, args, { dataSources }) => {
             const response = await dataSources.postService.getPost(args);
             return response;
         },

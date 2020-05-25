@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoDBConnection = require('../utils/MongoDBConnection');
 const PostRepository = require('../repository/PostRepository');
 let postSchema = require('../mongoSchema/Post');
 const logger = require('../utils/LogUtils');
@@ -13,8 +14,7 @@ const s3 = new AWS.S3();
 
 class PostService {
     constructor() {
-        console.log("postSchema..",postSchema)
-        this.postModel = mongoose.model('Post', postSchema);
+        this.postModel = mongoDBConnection.model('post', postSchema);
         this.postRepository = new PostRepository(this.postModel);
         this.getPost = this.getPost.bind(this);
         // this.getAllPosts = this.getAllPosts.bind(this);
@@ -26,7 +26,6 @@ class PostService {
     }
     async getPost(id) {
         try {
-            ;
             logger.debug('Request received to fetch post details for id: ' + id);
             const postDetails = [];
             const post = await this.postRepository.get(id);

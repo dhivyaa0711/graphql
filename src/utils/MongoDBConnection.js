@@ -1,16 +1,16 @@
 'use strict';
 const mongoose = require("mongoose");
 
-const uristring =
+const url =
     process.env.MONGO_URL ||
-    'mongodb://127.0.0.1:27017/?compressors=zlib&gssapiServiceName=mongodb';
+    'mongodb://127.0.0.1:27017/photoposting';
 // Makes connection to MongoDB
-const mongoDBConnection = mongoose.createConnection(uristring, function (err, res) {
+const mongoDBConnection = mongoose.createConnection(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, database) {
     if (err) {
-        console.log('ERROR connecting to: ' + uristring + '. ' + err);
+        console.log('ERROR connecting to: ' + url + '. ' + err);
     } else {
-        console.log('Succeeded connecting to: ' + uristring);
-        return res;
+        console.log('Succeeded connecting to: ' + url);
+        return database;
     }
 });
 module.exports = mongoDBConnection;

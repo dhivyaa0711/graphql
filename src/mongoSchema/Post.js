@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 let postsSchema = new mongoose.Schema({
-    id: String,
+    _id: String,
     url: String,
     key: String,
     likes: {

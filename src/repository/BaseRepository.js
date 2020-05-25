@@ -4,10 +4,8 @@ class BaseRepository {
         this.model = model;
     }
     async get(params) {
-        console.log("params..",params)
         try {
-            const response = await this.model.findOne(params);
-            console.log("response..", response)
+            const response = await this.model.find(params)
             return response;
         }
         catch (error) {
