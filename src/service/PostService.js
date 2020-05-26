@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { mongoDBConnection } = require('../utils/MongoDBConnection');
 const Post = require('../model/Post');
-const PostRepository = require('../repository/PostRepository');
+// const PostRepository = require('../repository/PostRepository');
 const logger = require('../utils/LogUtils');
 const { v4 } = require('uuid');
 const AWS = require('aws-sdk');
@@ -13,7 +13,7 @@ AWS.config.credentials = credentials;
 const s3 = new AWS.S3();
 class PostService {
     constructor() {
-        this.postRepository = new PostRepository(Post);
+        // this.postRepository = new PostRepository(Post);
         this.getPost = this.getPost.bind(this);
         // this.getAllPosts = this.getAllPosts.bind(this);
         // this.createPost = this.createPost.bind(this);
@@ -25,8 +25,10 @@ class PostService {
     async getPost(id) {
         try {
             logger.debug('Request received to fetch post details for id: ' + id);
+            console.log(id._id)
             const postDetails = [];
-            const response = await Post.find(id) 
+            const response = await Post.find(id._id)
+                .then((res)=>{console.log("hellooo")})
             console.log("resp..", response)
             logger.debug('Retrieved post details');
             if (post) {
