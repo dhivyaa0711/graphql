@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-let postsSchema = new mongoose.Schema({
+const post = mongoose.model('post', {
     _id: String,
     url: String,
     key: String,
@@ -29,4 +29,4 @@ let postsSchema = new mongoose.Schema({
     }
 });
 
-module.exports = postsSchema;
+module.exports = post;

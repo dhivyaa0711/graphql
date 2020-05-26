@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const mongoDBConnection = require('../utils/MongoDBConnection');
+const { mongoDBConnection } = require('../utils/MongoDBConnection');
+const Post = require('../model/Post');
 const PostRepository = require('../repository/PostRepository');
-let postSchema = require('../mongoSchema/Post');
 const logger = require('../utils/LogUtils');
 const { v4 } = require('uuid');
 const AWS = require('aws-sdk');
@@ -11,11 +11,9 @@ const BUCKET_NAME = process.argv[2];
 const credentials = new AWS.SharedIniFileCredentials({ profile: 'awss3' });
 AWS.config.credentials = credentials;
 const s3 = new AWS.S3();
-
 class PostService {
     constructor() {
-        this.postModel = mongoDBConnection.model('post', postSchema);
-        this.postRepository = new PostRepository(this.postModel);
+        this.postRepository = new PostRepository(Post);
         this.getPost = this.getPost.bind(this);
         // this.getAllPosts = this.getAllPosts.bind(this);
         // this.createPost = this.createPost.bind(this);
@@ -28,7 +26,8 @@ class PostService {
         try {
             logger.debug('Request received to fetch post details for id: ' + id);
             const postDetails = [];
-            const post = await this.postRepository.get(id);
+            const response = await Post.find(id) 
+            console.log("resp..", response)
             logger.debug('Retrieved post details');
             if (post) {
                 postDetails.push(post);
