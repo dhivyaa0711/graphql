@@ -15,7 +15,7 @@ const typeDefs = gql(`
         post: [Post]
     }
     type Post {
-        id: ID
+        postId: ID
         url: String
         key: String
         likes: Likes
@@ -25,7 +25,7 @@ const typeDefs = gql(`
         createdBy: Employee
     }
     type Comments {
-        id: ID!
+        id: ID
         commentStatement: String
         commentBy: Employee
     }
@@ -35,7 +35,7 @@ const typeDefs = gql(`
         createdBy: EmployeeInput
     }
     input PostInput {        
-        id: ID!
+        postId: ID!
         url: String
         key: String
         likes: LikeInput
@@ -56,13 +56,13 @@ const typeDefs = gql(`
         employee: [Employee]
     }
     type Employee {
-        id: ID!
+        id: ID
         firstName: String
         lastName: String
     }
     type Query {
-        getPost(_id: ID!): PostResponse
-        getAllPosts(pageSize: Int, lastItem: String): PostResponse
+        getPost(id: ID!): PostResponse
+        getAllPosts: PostResponse
     }
     type Mutation {
         createPost(post: createPostInput): PostResponse
@@ -81,15 +81,15 @@ const typeDefs = gql(`
 const resolvers = {
     Query: {
         getPost: async (_, args, { dataSources }) => {
-            const response = await dataSources.postService.getPost(args);
+            const response = await dataSources.postService.getPost(args.id);
             return response;
         },
-        // getAllPosts: async (_, args, {dataSources}) => {
-        //     const response = await dataSources.postService.getAllPosts(args.pageSize, args.lastItem);
-        //     return response;
-        // },
+        getAllPosts: async (_, args, {dataSources}) => {
+            const response = await dataSources.postService.getAllPosts();
+            return response;
+        },
     },
-    /*Mutation: {
+    Mutation: {
         createPost: async (_, args, {dataSources}) => {
             const { post } = args;            
             const response = await dataSources.postService.createPost(post);
@@ -115,7 +115,7 @@ const resolvers = {
             const response = await dataSources.postService.removeComment(post);
             return response;
         }
-    }*/
+    }
 };
 
 exports.typeDefs = typeDefs;

@@ -1,7 +1,5 @@
-const mongoose = require('mongoose');
-const { mongoDBConnection } = require('../utils/MongoDBConnection');
-const Post = require('../model/Post');
-// const PostRepository = require('../repository/PostRepository');
+require('../utils/MongoDBConnection');
+const post = require('../model/Post');
 const logger = require('../utils/LogUtils');
 const { v4 } = require('uuid');
 const AWS = require('aws-sdk');
@@ -12,27 +10,14 @@ const credentials = new AWS.SharedIniFileCredentials({ profile: 'awss3' });
 AWS.config.credentials = credentials;
 const s3 = new AWS.S3();
 class PostService {
-    constructor() {
-        // this.postRepository = new PostRepository(Post);
-        this.getPost = this.getPost.bind(this);
-        // this.getAllPosts = this.getAllPosts.bind(this);
-        // this.createPost = this.createPost.bind(this);
-        // this.removePost = this.removePost.bind(this);
-        // this.likeUnlikePost = this.likeUnlikePost.bind(this);
-        // this.upsertComment = this.upsertComment.bind(this);
-        // this.removeComment = this.removeComment.bind(this);
-    }
     async getPost(id) {
         try {
             logger.debug('Request received to fetch post details for id: ' + id);
-            console.log(id._id)
             const postDetails = [];
-            const response = await Post.find(id._id)
-                .then((res)=>{console.log("hellooo")})
-            console.log("resp..", response)
+            const postResponse = await post.findOne({ postId: id });
             logger.debug('Retrieved post details');
             if (post) {
-                postDetails.push(post);
+                postDetails.push(postResponse);
             }
             else {
                 return {
@@ -60,18 +45,17 @@ class PostService {
             }
         }
     }
-    /*async getAllPosts(pageSize, lastItem) {
+    async getAllPosts() {
         try {
-            let post;
             logger.debug('Request received to fetch all posts');
-            post = await this.postRepository.scan(pageSize, lastItem);
+            const postResponse = await post.find();
             logger.debug('Retrieved all posts from db');
             return {
                 code: 200,
                 success: true,
                 message: "Post fetched successfully",
                 lastEvaluatedKey: post.LastEvaluatedKey ? post.LastEvaluatedKey.id : post.LastEvaluatedKey,
-                post: post.Items
+                post: postResponse
             }
         }
         catch (error) {
@@ -84,14 +68,14 @@ class PostService {
             }
         }
     }
-    async createPost(post) {
-        const { filename, createReadStream } = await post.file;
-        const { caption, createdBy } = post;
+    async createPost(postInput) {
+        const { filename, createReadStream } = await postInput.file;
+        const { caption, createdBy } = postInput;
         try {
 
             logger.debug('Request received to upload post');
             const readStream = createReadStream();
-            let post;
+            let postDetails;
             let postResponse = [];
             // Setting up S3 upload parameters
             const params = {
@@ -105,8 +89,8 @@ class PostService {
             const fileUploadResponse = await s3.upload(params).promise();
             logger.debug('Uploaded post to S3 bucket');
             if (fileUploadResponse) {
-                post = {
-                    id: v4(),
+                postDetails = {
+                    postId: v4(),
                     url: fileUploadResponse.Location,
                     key: fileUploadResponse.Key,
                     caption,
@@ -115,12 +99,12 @@ class PostService {
                     createdDate: new Date().toISOString(),
                     createdBy
                 }
-                logger.debug('Inserting post details to db with post id:: ' + post.id);
-                await this.postRepository.put(post);
-                postResponse.push(post);
-                logger.debug('Inserted post details to db with post id:: ' + post.id);
+                logger.debug('Inserting post details to db with post id:: ' + postDetails.postId);
+                const newPost = new post(postDetails);
+                await newPost.save();
+                postResponse.push(postDetails);
+                logger.debug('Inserted post details to db with post id:: ' + postDetails.postId);
             }
-            ;
             return {
                 code: 201,
                 success: true,
@@ -167,32 +151,33 @@ class PostService {
             };
         }
     }
-    async likeUnlikePost(post) {
+    async likeUnlikePost(postInput) {
         let filteredResponse, putResponse;
         try {
             ;
             logger.debug('Request received to like/unlike post');
             let postResponse = [];
-            let getResponse = await this.postRepository.get({ id: post.id });
-            if (getResponse && post && post.likes) {
+            let getResponse = await post.findOne({ postId: postInput.postId });
+            if (getResponse && postInput && postInput.likes) {
                 getResponse.likes = getResponse.likes ? getResponse.likes : {};
                 getResponse.likes.count = getResponse.likes.count ? getResponse.likes.count : 0;
                 if (!getResponse.likes.employee) {
                     getResponse.likes.employee = [];
                 }
-                filteredResponse = getResponse.likes.employee.filter((obj) => obj.id === post.likes.employee.id);
+                filteredResponse = getResponse.likes.employee.filter((obj) => obj.id === postInput.likes.employee.id);
                 if (filteredResponse && filteredResponse.length > 0) {
                     getResponse.likes.count = getResponse.likes.count - 1;
-                    getResponse.likes.employee = getResponse.likes.employee.filter((obj) => obj.id !== post.likes.employee.id);
+                    getResponse.likes.employee = getResponse.likes.employee.filter((obj) => obj.id !== postInput.likes.employee.id);
                 }
                 else {
                     getResponse.likes.count = getResponse.likes.count + 1;
-                    getResponse.likes.employee.push(post.likes.employee);
+                    getResponse.likes.employee.push(postInput.likes.employee);
                 }
             }
             postResponse.push(getResponse);
             logger.debug('Saving like/unlike preference to db');
-            putResponse = await this.postRepository.update(getResponse, 'likes');
+            const updatePost = new post(getResponse);
+            const putResponse = await updatePost.save();
             logger.debug('like/unlike preference saved to db');
             if (putResponse) {
                 return {
@@ -213,36 +198,37 @@ class PostService {
             };
         }
     }
-    async upsertComment(post) {
+    async upsertComment(postInput) {
         try {
             ;
-            logger.debug('Request received to upsert comments for post id:: ' + post.id);
+            logger.debug('Request received to upsert comments for post id:: ' + postInput.postId);
             let postResponse = [];
-            let getResponse = await this.postRepository.get({ id: post.id });
+            let getResponse = await post.findOne({ postId: postInput.postId });
             let filteredResponse = getResponse.comments ? getResponse.comments.find((comment) => {
-                if (comment.id === post.comment.id) {
-                    comment.commentStatement = post.comment.commentStatement;
+                if (comment.id === postInput.comment.id) {
+                    comment.commentStatement = postInput.comment.commentStatement;
                     comment.createdDate = new Date().toISOString();
                     return comment;
                 }
             }) : null;
             if (!filteredResponse) {
                 const commentId = v4();
-                post.comment.id = commentId;
-                post.comment.createdDate = new Date().toISOString();
-                if (post.comment) {
+                postInput.comment.id = commentId;
+                postInput.comment.createdDate = new Date().toISOString();
+                if (postInput.comment) {
                     if (getResponse.comments) {
-                        getResponse.comments.push(post.comment)
+                        getResponse.comments.push(postInput.comment)
                     }
                     else {
                         getResponse.comments = [];
-                        getResponse.comments.push(post.comment);
+                        getResponse.comments.push(postInput.comment);
                     }
                 }
             }
             postResponse.push(getResponse);
             logger.debug('Saving user comments to db');
-            let putResponse = await this.postRepository.update(getResponse, 'comments');
+            const updatePost = new post(getResponse);
+            const putResponse = await updatePost.save();
             logger.debug('Successfully saved user comments to db');
             if (putResponse) {
                 return {
@@ -263,19 +249,19 @@ class PostService {
             };
         }
     }
-    async removeComment(post) {
+    async removeComment(postInput) {
         try {
-            ;
-            logger.debug('Request received to remove comments for post id:: ' + post.id);
+            logger.debug('Request received to remove comments for post id:: ' + postInput.postId);
             let filteredResponse;
             let postResponse = [];
-            let getResponse = await this.postRepository.get({ id: post.id });
-            if (post && post.comment) {
-                filteredResponse = getResponse.comments.filter((comment) => comment.id !== post.comment.id);
+            let getResponse = await post.findOne({ postId: postInput.postId });
+            if (postInput && postInput.comment) {
+                filteredResponse = getResponse.comments.filter((comment) => comment.id !== postInput.comment.id);
             }
             getResponse.comments = filteredResponse;
             logger.debug('Removing comments from a post');
-            let putResponse = await this.postRepository.update(getResponse, 'comments');
+            const updatePost = new post(getResponse);
+            const putResponse = await updatePost.save();
             logger.debug('Removed comments from the post');
             postResponse.push(getResponse);
             if (putResponse) {
@@ -296,7 +282,7 @@ class PostService {
                 post: null
             };
         }
-    }*/
+    }
 }
 
 module.exports = PostService;

@@ -5,7 +5,7 @@ const url =
     process.env.MONGO_URL ||
     'mongodb://127.0.0.1:27017/photoposting';
 // Makes connection to MongoDB
-const mongoDBConnection = mongoose.createConnection(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, database) {
+const mongoDBConnection = mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, database) {
     if (err) {
         console.log('ERROR connecting to: ' + url + '. ' + err);
     } else {
