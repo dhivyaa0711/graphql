@@ -206,3 +206,8 @@ To run the app, follow the below steps:
     viii. Get all posts with all details:<br/>
     You should be able to see a query in `body -> graphql`...<br/>
     Response : you will get all the details of posted pictures<br/>
+
+## Running tests
+```bash
+        npm test
+    ```
