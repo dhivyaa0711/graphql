@@ -6,6 +6,10 @@ const postService = require('./src/service/PostService');
 const PORT = process.env.PORT || 4000;
 // Create an express server and a GraphQL endpoint
 const app = express();
+
+const cors = require('cors')
+app.use(cors())
+
 const server = new ApolloServer({
     typeDefs,
     resolvers,
