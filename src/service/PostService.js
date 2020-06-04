@@ -16,7 +16,7 @@ class PostService {
             const postDetails = [];
             const postResponse = await post.findOne({ postId: id });
             logger.debug('Retrieved post details');
-            if (post) {
+            if (postResponse) {
                 postDetails.push(postResponse);
             }
             else {
@@ -179,6 +179,7 @@ class PostService {
             const updatePost = new post(getResponse);
             const putResponse = await updatePost.save();
             logger.debug('like/unlike preference saved to db');
+            console.log("checking number of likes"+postResponse)
             if (putResponse) {
                 return {
                     code: 200,
