@@ -1,14 +1,17 @@
 # GraphQL Application
 
-This is a graphQl Apllication where we can create a post with a picture, like or unlike the post, can add/edit/remove a comment from the post.
-
+This is a graphQL Application where we can <br/> 
+            1. create a post with a picture <br/> 
+            2. like or unlike the post <br/> 
+            3. can add/edit/remove a comment from the post. <br/>
+ 
 ## Installation
 ### ...........For Photoposting-Mongo Branch............
 
 To run the app, follow the below steps:
 
-1. Now you have to create an s3 bucket in aws console<br/>
-    i.   Login or signup to aws console<br/>
+1. You have to create an s3 bucket in aws console<br/>
+    i.   Login or Signup to `aws console`<br/>
     ii.  search for  `s3` in services<br/>
     iii. create an s3 bucket with the unique name and a specific region<br/>
     iv.  Goto `My Security Credentials` which is in dropdown of your username<br/>
