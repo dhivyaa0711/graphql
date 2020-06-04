@@ -1,13 +1,18 @@
 const express = require('express');
 const expressPlayground = require('graphql-playground-middleware-express').default;
 const { ApolloServer } = require('apollo-server-express');
-const { typeDefs, resolvers } = require('./src/graphql/Post');
+const dotEnv = require('dotenv');
+const cors = require('cors')
+
 const postService = require('./src/service/PostService');
+const typeDefs = require('./src/typeDefs');
+const resolvers = require('./src/resolvers');
+const { verifyUser} = require('./src/helper/context');
+// const isAuthenticated = require('./src/resolvers/middleware/index').isAuthenticated
+
 const PORT = process.env.PORT || 4000;
 // Create an express server and a GraphQL endpoint
 const app = express();
-
-const cors = require('cors')
 app.use(cors())
 
 const server = new ApolloServer({
@@ -18,9 +23,16 @@ const server = new ApolloServer({
             postService: new postService()
         };
     },
-    path: '/graphql'
+    path: '/graphql',
+    context : async ({req}) => {
+        const contextObj = {};
+        await verifyUser(req)
+        contextObj.email = req.email;
+        return contextObj;        
+    }
 });
 server.applyMiddleware({ app });
+// app.use(isAuthenticated())
 app.get('/playground',
     expressPlayground({
         endpoint: '/graphql'

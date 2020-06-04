@@ -125,7 +125,7 @@ class PostService {
     async removePost(postId, filename) {
         try {
             logger.debug('Request received to delete post details from db with post id:: ' + postId);
-            await post.deleteOne({ id: postId });
+            await post.deleteOne({ postId: postId });
             logger.debug('Post details deleted from db');
             logger.debug('Deleting photo from S3 bucket');
             const deleteResponse = await s3.deleteObject({
