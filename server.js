@@ -29,3 +29,34 @@ app.get('/playground',
 app.listen({ port: PORT }, () => {
     console.log('Server listening on port 4000')
 });
+
+const costAnalysis = require('graphql-cost-analysis').default
+const costAnalyzer = costAnalysis({
+    maximumCost: 1000,
+  })
+  
+const graphqlExpress = require('express');
+app.use(
+  '/graphql',
+  graphqlExpress(req => {
+    return {
+      schema,
+      rootValue: null,
+      validationRules: [
+        costAnalysis({
+          variables: req.body.variables,
+          maximumCost: 1000,
+        }),
+      ],
+    }
+  })
+)
+
+
+const depthLimit = require('graphql-depth-limit');
+const graphqlHTTP = require('express-graphql');
+ 
+app.use('/graphql', graphqlHTTP((req, res) => ({
+  schema,
+  validationRules: [ depthLimit(0) ]
+})))
