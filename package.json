@@ -11,7 +11,7 @@
     "express-graphql": "^0.9.0",
     "graphql": "^15.0.0",
     "graphql-playground-middleware-express": "^1.7.14",
-    "mocha": "^7.2.0",
+    "mocha": "^10.2.0",
     "supertest": "^4.0.2",
     "uuid": "^7.0.3",
     "winston": "^3.2.1",
